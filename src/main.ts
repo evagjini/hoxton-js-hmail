@@ -12,7 +12,8 @@ type Email={
 }
 
 type State={
-  emails:Email[]
+  emails:Email[],
+  selectedEmail:Email|null
 } 
 
 
@@ -46,8 +47,19 @@ const state : State = {
       img: 'assets/gov.jpg',
       read: false
     }
-    // feel free to add more emails here
-  ]
+    
+  ],
+  selectedEmail: null
+}
+
+
+function selectEmail (email:Email){
+   email.read = true
+   state.selectedEmail= email
+}
+
+function deslectEmail (){
+  state.selectedEmail= null
 }
 
 
@@ -57,8 +69,11 @@ function renderSingleEmailListItem(email:Email, ulEl: HTMLUListElement){
 let liEl=document.createElement('li')
 if (email.read) liEl.className = 'emails-list__item read'
   else liEl.className = 'emails-list__item'
-
-
+  liEl.addEventListener('click', function(){
+    
+  selectEmail (email)
+    render()
+  })
 
 
   let spanEl= document.createElement('span')
@@ -110,12 +125,64 @@ mainEl.append(title, ulEl)
 
    }
 
-  //  function render(){
-  //   renderSingleEmailListItem
-  //   renderEmailList()
+
+   function renderEmailDetails(){
+
+    let mainEl= document.querySelector('main')
+    if(mainEl===null) return
+    if(state.selectedEmail===null) return
+    mainEl.textContent=''
+
+    let backbtn = document.createElement('button')
+    backbtn.textContent= '⬅Back'
+    backbtn.addEventListener('click', function(){
+      deslectEmail()
+      render()
+    })
+
+    let title= document.createElement('h1')
+    title.className= state.selectedEmail.from
+
+    let imgEl= document.createElement('img')
+    imgEl.className= 'email-details__image'
+    imgEl.src= state.selectedEmail.img
+
+
+    let headerEl= document.createElement('h2')
+    headerEl.className= 'single-email__header'
+    headerEl.textContent= state.selectedEmail.header
+
+
+    let contentEl = document.createElement('p')
+    contentEl.className= 'email-details__content'
+    contentEl.textContent= state.selectedEmail.content
+
+    mainEl.append(backbtn, title, imgEl, headerEl, contentEl)
+
+   }
+   
+
+   function render(){
+    if (state.selectedEmail) renderEmailDetails()
+    else renderEmailList()
     
-  //  }
-  //  render()
+   }
+
+   let logoHmail= document.querySelector('.logo')
+
+   logoHmail?.addEventListener('mouseenter', function (){
+    deslectEmail()
+    render()
+   })
+
+
+
+
+
+
+   //// not clear about filter 
+
+   render()
 
 
 
