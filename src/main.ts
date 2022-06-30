@@ -11,10 +11,12 @@ type Email={
     read: boolean;
 }
 
-type State= Email[]
+type State={
+  emails:Email[]
+} 
 
 
-const state = {
+const state : State = {
   emails: [
     {
       from: 'Nico',
@@ -49,80 +51,77 @@ const state = {
 }
 
 
-let mainEl:HTMLDivElement= document.querySelector('.main')
+function renderSingleEmailListItem(email:Email, ulEl: HTMLUListElement){
 
 
-function createEmail(item:Email){
-  let ulEl:HTMLUListElement= document.createElement('ul');
-  ulEl.className='emails-list';
+let liEl=document.createElement('li')
+if (email.read) liEl.className = 'emails-list__item read'
+  else liEl.className = 'emails-list__item'
 
 
 
-  
-   
-  let liEl= document.createElement('li')
-  liEl.className='emails-list__item'
+
   let spanEl= document.createElement('span')
-  spanEl.className='emails-list__item__read-icon material-symbols-outlined'
-  spanEl.textContent='mark_email_unread'
+  spanEl.className= 'emails-list__item__read-icon material-symbols-outlined'
 
+  spanEl.textContent= email.read ? 'mark_email_read' : 'mark_email_unread'
 
- let imgEl = document.createElement('img')
- imgEl.className='emails-list__item__image'
- imgEl.src= item.img
+  let imgEl= document.createElement('img')
+  imgEl.className= 'emails-list__item__image'
+  imgEl.src= email.img
 
- let pEl= document.createElement('p')
- pEl.className= 'emails-list__item__from'
- pEl.textContent=item.from
+  let fromEL =document.createElement('p')
+  fromEL.className= 'emails-list__item__from'
+  fromEL.textContent= email.from
 
+  let contentEl = document.createElement('p')
+  contentEl.className = 'emails-list__item__content'
+  contentEl.textContent= email.header
 
- let  p2El= document.createElement('p')
- p2El.className='emails-list__item__content'
- p2El.textContent=item.content
+  liEl.append(spanEl, imgEl, fromEL, contentEl )
 
-
-
-
- liEl.append(spanEl, imgEl,pEl,p2El)
- ulEl.append(liEl)
-
-
-
- mainEl.append(ulEl)
-
- if(item.read===true){
-  liEl.remove()
-  createEmail(item)
-  // readEmails(item)
-
-
- }
-}
-
-
-
-
-function textContent(item:Email){
-  let mainEl:HTMLDivElement= document.querySelector('.main')
-
-
-  let section = document.createElement('section')
-  section.className= 'single-email"'
-
-
-
-let btnEl= document.createElement('button')
-btnEl.className= 'single-email__button'
-btnEl.textContent= '⬅Back'
-btnEl.addEventListener('click', () =>{
-  mainEl.textContent=''
-
-
-})
-
-
+  ulEl.append(liEl)
+  
 
 }
+  
+
+    function renderEmailList(){
+
+
+    let mainEl= document.querySelector('main')
+    if (mainEl=== null)  return
+    mainEl.textContent= ''
+
+
+
+    let title= document.createElement('h1')
+    title.innerText= 'Inbox'
+
+    let ulEl= document.createElement('ul')
+    ulEl.className= 'emails-list'
+
+for (let email of state.emails){
+  renderSingleEmailListItem(email, ulEl)
+
+}
+    
+mainEl.append(title, ulEl)
+
+   }
+
+  //  function render(){
+  //   renderSingleEmailListItem
+  //   renderEmailList()
+    
+  //  }
+  //  render()
+
+
+
+
+
+
 
 
 
