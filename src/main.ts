@@ -13,7 +13,8 @@ type Email={
 
 type State={
   emails:Email[],
-  selectedEmail:Email|null
+  selectedEmail:Email|null,
+  filter:string
 } 
 
 
@@ -49,7 +50,8 @@ const state : State = {
     }
     
   ],
-  selectedEmail: null
+  selectedEmail: null,
+  filter:''
 }
 
 
@@ -135,7 +137,7 @@ mainEl.append(title, ulEl)
 
     let backbtn = document.createElement('button')
     backbtn.textContent= '⬅Back'
-    backbtn.addEventListener('click', function(){
+    backbtn.addEventListener('mouseenter', function(){
       deslectEmail()
       render()
     })
